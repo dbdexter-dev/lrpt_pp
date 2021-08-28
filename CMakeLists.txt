@@ -13,6 +13,7 @@ pkg_check_modules(GTK REQUIRED "gtk+-3.0")
 include_directories(${GTK_INCLUDE_DIRS})
 link_directories(${GTK3_LIBRARY_DIRS})
 add_definitions(${GTK3_CFLAGS_OTHER})
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -rdynamic")
 
 # Custom commands to embed glib resources in executable
 find_program(GLIB_COMPILE_RESOURCES NAMES glib-compile-resources REQUIRED)
@@ -30,7 +31,7 @@ add_custom_command(
 	MAIN_DEPENDENCY ${GRESOURCE_XML}
 	DEPENDS glade/ui.glade
 )
-set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_C} PROPERTIES GENERATED TRUE}
+set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_C} PROPERTIES GENERATED TRUE)
 
 if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Release")
@@ -50,6 +51,10 @@ endif()
 
 
 set(COMMON_SOURCES
+	gui/gui.c gui/gui.h
+	gui/menu.c
+
+	effects/enhancements.c effects/enhancements.h
 )
 
 set(COMMON_INC_DIRS
@@ -59,7 +64,7 @@ set(COMMON_INC_DIRS
 # Main executable target
 add_executable(meteor_postprocess main.c ${COMMON_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_C})
 target_include_directories(meteor_postprocess PUBLIC ${COMMON_INC_DIRS})
-target_link_libraries(meteor_postprocess PUBLIC ${GTK3_LIBRARIES} pthread)
+target_link_libraries(meteor_postprocess PUBLIC ${GTK_LIBRARIES} pthread)
 
 # Add links to ncurses if enabled
 # if (ENABLE_TUI AND NCURSES_LIBRARY)
