@@ -28,6 +28,13 @@ on_radio_enha_vegetation_toggled(GtkRadioButton *button)
 }
 
 gboolean
+on_radio_enha_211_toggled(GtkRadioButton *button)
+{
+	if (!gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(button))) return FALSE;
+	composite_set_enhancement(VEG_IR, update_composite);
+}
+
+gboolean
 on_radio_enha_hvc_toggled(GtkRadioButton *button)
 {
 	if (!gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(button))) return FALSE;
@@ -86,7 +93,7 @@ on_menu_open_activate()
 			composite_init(gdk_pixbuf_get_pixels(pixbuf), width, height);
 			composite_set_enhancement(NONE, update_composite);
 
-			printf("Loaded %dx%d image %s\n", width, height, fname);
+			update_title(fname);
 			break;
 		case GTK_RESPONSE_CANCEL:
 			break;

@@ -11,8 +11,6 @@ on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
 	GdkPixbuf *composite, *scaled;
 	uint8_t *pixels;
 
-	printf("Updating composite\n");
-
 	pixels = composite_get_pixels();
 	if (!pixels) {
 		composite_release_pixels();

@@ -42,6 +42,9 @@ composite_set_enhancement(Enhancement e, void(*callback)())
 		case VEGETATION:
 			kernel = enhancement_vegetation;
 			break;
+		case VEG_IR:
+			kernel = enhancement_211;
+			break;
 		case THERMAL:
 			kernel = enhancement_thermal;
 			break;

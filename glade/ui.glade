@@ -126,11 +126,22 @@
                               <object class="GtkRadioMenuItem" id="radio_enha_122">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">_RGB 122</property>
+                                <property name="label" translatable="yes">RGB _122</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-as-radio">True</property>
                                 <property name="group">radio_enha_normal</property>
                                 <signal name="toggled" handler="on_radio_enha_122_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioMenuItem" id="radio_enha_211">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">RGB _211</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-as-radio">True</property>
+                                <property name="group">radio_enha_normal</property>
+                                <signal name="toggled" handler="on_radio_enha_211_toggled" swapped="no"/>
                               </object>
                             </child>
                             <child>

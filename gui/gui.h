@@ -5,5 +5,6 @@
 
 void gui_init(GtkBuilder *builder);
 void update_composite();
+void update_title(char *title);
 
 #endif

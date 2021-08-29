@@ -27,30 +27,28 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem">
-                        <property name="label">gtk-open</property>
+                      <object class="GtkMenuItem" id="menu_open">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">_Open</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
+                        <signal name="activate" handler="on_menu_open_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem">
-                        <property name="label">gtk-save</property>
+                      <object class="GtkMenuItem" id="menu_save">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">_Save</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem">
-                        <property name="label">gtk-save-as</property>
+                      <object class="GtkMenuItem" id="menu_save_as">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">S_ave as...</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
                       </object>
                     </child>
                     <child>
@@ -60,12 +58,12 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem">
-                        <property name="label">gtk-quit</property>
+                      <object class="GtkMenuItem" id="menu_quit">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">_Quit</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
+                        <signal name="activate" handler="on_menu_quit_activate" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -215,6 +213,7 @@
             <property name="margin-bottom">5</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <signal name="draw" handler="on_image_composite_draw" swapped="no"/>
           </object>
           <packing>
             <property name="left-attach">0</property>
