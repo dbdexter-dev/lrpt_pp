@@ -42,6 +42,13 @@ on_radio_enha_hvc_toggled(GtkRadioButton *button)
 }
 
 gboolean
+on_radio_enha_hvc_precip_toggled(GtkRadioButton *button)
+{
+	if (!gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(button))) return FALSE;
+	composite_set_enhancement(HVC_PRECIP, update_composite);
+}
+
+gboolean
 on_radio_enha_thermal_toggled(GtkRadioButton *button)
 {
 	if (!gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(button))) return FALSE;

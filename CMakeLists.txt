@@ -57,6 +57,9 @@ set(COMMON_SOURCES
 
 	effects/enhancements.c effects/enhancements.h
 
+	palettes/palettes.h
+	palettes/hvc.c
+
 	channel.c channel.h
 	composite.c composite.h
 	utils.h

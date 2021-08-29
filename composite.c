@@ -51,6 +51,9 @@ composite_set_enhancement(Enhancement e, void(*callback)())
 		case HVC:
 			kernel = enhancement_hvc;
 			break;
+		case HVC_PRECIP:
+			kernel = enhancement_hvc_precip;
+			break;
 		default:
 			printf("Unknown enhancement: %d\n", e);
 			break;

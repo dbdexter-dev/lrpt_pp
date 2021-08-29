@@ -33,6 +33,7 @@
                         <property name="label" translatable="yes">_Open</property>
                         <property name="use-underline">True</property>
                         <signal name="activate" handler="on_menu_open_activate" swapped="no"/>
+                        <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -41,6 +42,7 @@
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes">_Save</property>
                         <property name="use-underline">True</property>
+                        <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -49,6 +51,7 @@
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes">S_ave as...</property>
                         <property name="use-underline">True</property>
+                        <accelerator key="s" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -64,6 +67,7 @@
                         <property name="label" translatable="yes">_Quit</property>
                         <property name="use-underline">True</property>
                         <signal name="activate" handler="on_menu_quit_activate" swapped="no"/>
+                        <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                   </object>
@@ -126,11 +130,22 @@
                               <object class="GtkRadioMenuItem" id="radio_enha_122">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">_RGB 122</property>
+                                <property name="label" translatable="yes">RGB _122</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-as-radio">True</property>
                                 <property name="group">radio_enha_normal</property>
                                 <signal name="toggled" handler="on_radio_enha_122_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioMenuItem" id="radio_enha_211">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">RGB _211</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-as-radio">True</property>
+                                <property name="group">radio_enha_normal</property>
+                                <signal name="toggled" handler="on_radio_enha_211_toggled" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -153,6 +168,17 @@
                                 <property name="draw-as-radio">True</property>
                                 <property name="group">radio_enha_normal</property>
                                 <signal name="toggled" handler="on_radio_enha_hvc_toggled" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioMenuItem" id="radio_hvc_precip">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">HVC (with precipitation)</property>
+                                <property name="use-underline">True</property>
+                                <property name="draw-as-radio">True</property>
+                                <property name="group">radio_enha_normal</property>
+                                <signal name="toggled" handler="on_radio_hvc_precip_toggled" swapped="no"/>
                               </object>
                             </child>
                             <child>

@@ -41,7 +41,7 @@ on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
 
 	/* Scale the image and paint it */
 	scaled = gdk_pixbuf_scale_simple(composite, w_new, h_new, GDK_INTERP_BILINEAR);
-	gdk_cairo_set_source_pixbuf(cr, scaled, (w_draw - w_new)/2.0, 0);
+	gdk_cairo_set_source_pixbuf(cr, scaled, (w_draw - w_new)/2.0, (h_draw - h_new)/2.0);
 	cairo_paint(cr);
 
 	/* Cleanup */
