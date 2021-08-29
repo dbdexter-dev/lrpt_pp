@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "composite.h"
 #include "gui/gui.h"
 
 int
@@ -14,6 +15,8 @@ main(int argc, char *argv[])
 	gui_init(gtk_builder);
 
 	gtk_main();
+
+	return 0;
 }
 
 void

@@ -2,5 +2,6 @@
 <gresources>
 	<gresource prefix="/com/dbdexter/meteor_postprocess">
 		<file>glade/ui.glade</file>
+		<file>palettes/hvc.bmp</file>
 	</gresource>
 </gresources>

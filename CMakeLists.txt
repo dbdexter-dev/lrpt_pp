@@ -52,9 +52,14 @@ endif()
 
 set(COMMON_SOURCES
 	gui/gui.c gui/gui.h
+	gui/composite_preview.c
 	gui/menu.c
 
 	effects/enhancements.c effects/enhancements.h
+
+	channel.c channel.h
+	composite.c composite.h
+	utils.h
 )
 
 set(COMMON_INC_DIRS
