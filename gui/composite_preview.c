@@ -3,7 +3,7 @@
 #include "gui.h"
 #include "utils.h"
 
-static int zoom = 0;
+static int _zoom = 0;
 
 gboolean
 on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
@@ -37,7 +37,7 @@ on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
 	w_draw = get_scrollable_image_width();
 	h_draw = get_scrollable_image_height();
 
-	if (zoom) {
+	if (_zoom) {
 		w_new = w_orig;
 		h_new = h_orig;
 	} else {
@@ -64,6 +64,6 @@ on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
 gboolean
 on_image_composite_button_release_event(GtkWidget *widget, GdkEvent *e, gpointer p)
 {
-	zoom = !zoom;
+	_zoom = !_zoom;
 	update_composite();
 }
