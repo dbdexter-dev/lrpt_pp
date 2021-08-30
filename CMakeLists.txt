@@ -52,6 +52,7 @@ endif()
 
 set(COMMON_SOURCES
 	gui/gui.c gui/gui.h
+	gui/save.c gui/save.h
 	gui/composite_preview.c
 	gui/menu.c
 

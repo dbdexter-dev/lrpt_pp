@@ -40,18 +40,10 @@
                       <object class="GtkMenuItem" id="menu_save">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">_Save</property>
+                        <property name="label" translatable="yes">_Save...</property>
                         <property name="use-underline">True</property>
+                        <signal name="activate" handler="on_menu_save_activate" swapped="no"/>
                         <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="menu_save_as">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">S_ave as...</property>
-                        <property name="use-underline">True</property>
-                        <accelerator key="s" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -243,6 +235,10 @@
           <object class="GtkScrolledWindow" id="scrolledwindow_composite">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="kinetic-scrolling">False</property>

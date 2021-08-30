@@ -13,6 +13,8 @@ typedef enum {
 	THERMAL,
 } Enhancement;
 
+char *enhancement_str(Enhancement e);
+
 void enhancement_none(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);
 void enhancement_122(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);
 void enhancement_211(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);

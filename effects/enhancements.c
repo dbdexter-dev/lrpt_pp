@@ -113,3 +113,24 @@ clut1d(int offset, int width, int height, int rowstride, uint8_t *src, uint8_t *
 		dst += rowstride;
 	}
 }
+
+char*
+enhancement_str(Enhancement e)
+{
+	switch (e) {
+		case NONE:
+			return "default";
+		case VISIBLE:
+			return "122";
+		case VEGETATION:
+			return "vegetation";
+		case VEG_IR:
+			return "211";
+		case HVC:
+			return "hvc";
+		case HVC_PRECIP:
+			return "hvc_precip";
+		case THERMAL:
+			return "thermal";
+	}
+}
