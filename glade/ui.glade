@@ -230,23 +230,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkImage" id="image_composite">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">5</property>
-            <property name="margin-end">5</property>
-            <property name="margin-top">5</property>
-            <property name="margin-bottom">5</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <signal name="draw" handler="on_image_composite_draw" swapped="no"/>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkSeparator">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -254,6 +237,47 @@
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow_composite">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="kinetic-scrolling">False</property>
+            <child>
+              <object class="GtkViewport" id="viewport_composite">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="shadow-type">none</property>
+                <child>
+                  <object class="GtkEventBox" id="eventbox_composite">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="visible-window">False</property>
+                    <signal name="button-release-event" handler="on_image_composite_button_release_event" swapped="no"/>
+                    <child>
+                      <object class="GtkImage" id="image_composite">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <signal name="draw" handler="on_image_composite_draw" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
       </object>

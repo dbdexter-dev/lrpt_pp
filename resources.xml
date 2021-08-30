@@ -3,6 +3,7 @@
 	<gresource prefix="/com/dbdexter/meteor_postprocess">
 		<file>glade/ui.glade</file>
 		<file>palettes/hvc.png</file>
+		<file>palettes/thermal.png</file>
 		<file>palettes/hvc_precip.png</file>
 		<file>palettes/vegetation.png</file>
 	</gresource>

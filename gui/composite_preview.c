@@ -1,6 +1,9 @@
 #include <gtk/gtk.h>
-#include "utils.h"
 #include "composite.h"
+#include "gui.h"
+#include "utils.h"
+
+static int zoom = 0;
 
 gboolean
 on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
@@ -25,23 +28,30 @@ on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
 			8,
 			composite_get_width(),
 			composite_get_height(),
-			composite_get_width()*3,
+			composite_get_rowstride(),
 			NULL,
 			NULL);
 
 	w_orig = gdk_pixbuf_get_width(composite);
 	h_orig = gdk_pixbuf_get_height(composite);
-	w_draw = gtk_widget_get_allocated_width(widget);
-	h_draw = gtk_widget_get_allocated_height(widget);
+	w_draw = get_scrollable_image_width();
+	h_draw = get_scrollable_image_height();
 
-	/* Compute the max composite size that can fit while keeping the aspect ratio */
-	scale = MIN(w_draw/(float)w_orig, h_draw/(float)h_orig);
-	w_new = MIN(w_draw-1, w_orig*scale);
-	h_new = MIN(h_draw-1, h_orig*scale);
+	if (zoom) {
+		w_new = w_orig;
+		h_new = h_orig;
+	} else {
+		/* Compute the max composite size that can fit while keeping the aspect ratio */
+		scale = MIN(w_draw/(float)w_orig, h_draw/(float)h_orig);
+		w_new = MIN(w_draw-1, w_orig*scale);
+		h_new = MIN(h_draw-1, h_orig*scale);
+	}
+
+	gtk_widget_set_size_request(widget, w_new, h_new);
 
 	/* Scale the image and paint it */
 	scaled = gdk_pixbuf_scale_simple(composite, w_new, h_new, GDK_INTERP_BILINEAR);
-	gdk_cairo_set_source_pixbuf(cr, scaled, (w_draw - w_new)/2.0, (h_draw - h_new)/2.0);
+	gdk_cairo_set_source_pixbuf(cr, scaled, 0, 0);
 	cairo_paint(cr);
 
 	/* Cleanup */
@@ -49,4 +59,11 @@ on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
 	g_object_unref(composite);
 	composite_release_pixels();
 	return FALSE;
+}
+
+gboolean
+on_image_composite_button_release_event(GtkWidget *widget, GdkEvent *e, gpointer p)
+{
+	zoom = !zoom;
+	update_composite();
 }

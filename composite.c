@@ -4,7 +4,7 @@
 #include "composite.h"
 
 typedef struct {
-	void (*kernel)(int, int, uint8_t*, uint8_t*);
+	void (*kernel)(int, int, int, uint8_t*, uint8_t*);
 	void (*callback)();
 } Args;
 
@@ -14,10 +14,10 @@ static Channel _original, _composite;
 static Args _a;
 
 void
-composite_init(uint8_t *base, int width, int height)
+composite_init(uint8_t *base, int width, int height, int rowstride)
 {
-	channel_init(&_original, width, height, base);
-	channel_init(&_composite, width, height, NULL);
+	channel_init(&_original, width, height, rowstride, base);
+	channel_init(&_composite, width, height, rowstride, NULL);
 }
 
 void
@@ -30,7 +30,7 @@ composite_deinit()
 void
 composite_set_enhancement(Enhancement e, void(*callback)())
 {
-	void (*kernel)(int, int, uint8_t*, uint8_t*) = enhancement_none;
+	void (*kernel)(int, int, int, uint8_t*, uint8_t*) = enhancement_none;
 	pthread_t tid;
 
 	switch (e) {
@@ -69,7 +69,7 @@ void*
 composite_apply_kernel(void *args)
 {
 	uint8_t *src, *dst;
-	int width, height;
+	int width, height, rowstride;
 	const Args *a = (Args*)args;
 
 	printf("Applying kernel %p\n", a->kernel);
@@ -80,8 +80,9 @@ composite_apply_kernel(void *args)
 	dst = _composite.pixbuf;
 	width = _original.width;
 	height = _original.height;
+	rowstride = _original.rowstride;
 
-	a->kernel(width, height, src, dst);
+	a->kernel(width, height, rowstride, src, dst);
 
 	pthread_mutex_unlock(&_composite.mutex);
 
@@ -111,4 +112,9 @@ int
 composite_get_height()
 {
 	return _composite.height;
+}
+int
+composite_get_rowstride()
+{
+	return _composite.rowstride;
 }

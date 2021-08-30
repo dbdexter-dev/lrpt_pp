@@ -5,91 +5,111 @@
 #include "palettes/palettes.h"
 #include "enhancements.h"
 
-static void clut(int offset_x, int offset_y, int width, int height, uint8_t *src, uint8_t *dst, const uint8_t *table);
+static void clut1d(int offset, int width, int height, int rowstride, uint8_t *src, uint8_t *dst, const uint8_t *table);
+static void clut2d(int offset_x, int offset_y, int width, int height, int rowstride, uint8_t *src, uint8_t *dst, const uint8_t *table);
 
 void
-enhancement_none(int width, int height, uint8_t *src, uint8_t *dst)
+enhancement_none(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
 {
-	memcpy(dst, src, width*height*3);
+	memcpy(dst, src, height*rowstride);
 }
 
 void
-enhancement_122(int width, int height, uint8_t *src, uint8_t *dst)
+enhancement_122(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
 {
 	int i, j;
 
-	for (i=0; i<width; i++) {
-		for (j=0; j<height; j++) {
-			src++;
-
+	for (i=0; i<height; i++) {
+		for (j=0; j<3*width; j+=3) {
 			/* Red <- green */
-			*dst++ = *src;
+			dst[j+0] = src[j+1];
 			/* Green <- green */
-			*dst++ = *src++;
+			dst[j+1] = src[j+1];
 			/* Blue <- blue */
-			*dst++ = *src++;
+			dst[j+2] = src[j+2];
 		}
+
+		src += rowstride;
+		dst += rowstride;
 	}
 }
 
 void
-enhancement_211(int width, int height, uint8_t *src, uint8_t *dst)
+enhancement_211(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
 {
 	int i, j;
 
-	for (i=0; i<width; i++) {
-		for (j=0; j<height; j++) {
-			src++;
+	for (i=0; i<height; i++) {
+		for (j=0; j<3*width; j+=3) {
 			/* Red <- green */
-			*dst++ = *src++;
+			dst[j+0] = src[j+1];
 			/* Green <- blue */
-			*dst++ = *src;
+			dst[j+1] = src[j+2];
 			/* Blue <- blue*/
-			*dst++ = *src++;
+			dst[j+2] = src[j+2];
+
 		}
+
+		src += rowstride;
+		dst += rowstride;
 	}
 }
 
 void
-enhancement_vegetation(int width, int height, uint8_t *src, uint8_t *dst)
+enhancement_vegetation(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
 {
-	clut(2, 1, width, height, src, dst, vegetation_clut.pixel_data);
+	clut2d(2, 1, width, height, rowstride, src, dst, vegetation_clut.pixel_data);
 }
 
 void
-enhancement_hvc(int width, int height, uint8_t *src, uint8_t *dst)
+enhancement_hvc(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
 {
-	clut(0, 1, width, height, src, dst, hvc_clut.pixel_data);
+	clut2d(0, 1, width, height, rowstride, src, dst, hvc_clut.pixel_data);
 }
 
 void
-enhancement_hvc_precip(int width, int height, uint8_t *src, uint8_t *dst)
+enhancement_hvc_precip(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
 {
-	clut(0, 1, width, height, src, dst, hvc_precip_clut.pixel_data);
+	clut2d(0, 1, width, height, rowstride, src, dst, hvc_precip_clut.pixel_data);
 }
 
 void
-enhancement_thermal(int width, int height, uint8_t *src, uint8_t *dst)
+enhancement_thermal(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
 {
-	printf("Unimplemented\n");
+	clut1d(0, width, height, rowstride, src, dst, thermal_clut.pixel_data);
 }
 
 
 static void
-clut(int offset_x, int offset_y, int width, int height, uint8_t *src, uint8_t *dst, const uint8_t *table)
+clut2d(int offset_x, int offset_y, int width, int height, int rowstride, uint8_t *src, uint8_t *dst, const uint8_t *table)
 {
 	int i, j;
 	uint8_t x, y;
 
-	for (i=0; i<width; i++) {
-		for (j=0; j<height; j++) {
-			x = src[offset_x];
-			y = src[offset_y];
+	for (i=0; i<height; i++) {
+		for (j=0; j<3*width; j+=3) {
+			x = src[j+offset_x];
+			y = src[j+offset_y];
 
-			src += 3;
-
-			memcpy(dst, &table[3*(x*256+y)], 3);
-			dst += 3;
+			memcpy(dst+j, &table[3*(x*256+y)], 3);
 		}
+		src += rowstride;
+		dst += rowstride;
+	}
+}
+
+static void
+clut1d(int offset, int width, int height, int rowstride, uint8_t *src, uint8_t *dst, const uint8_t *table)
+{
+	int i, j;
+	uint8_t x;
+
+	for (i=0; i<height; i++) {
+		for (j=0; j<3*width; j+=3) {
+			x = src[j+offset];
+			memcpy(dst+j, &table[3*x], 3);
+		}
+		src += rowstride;
+		dst += rowstride;
 	}
 }

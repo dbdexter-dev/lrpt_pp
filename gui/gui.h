@@ -7,4 +7,8 @@ void gui_init(GtkBuilder *builder);
 void update_composite();
 void update_title(char *title);
 
+
+int get_scrollable_image_width();
+int get_scrollable_image_height();
+
 #endif

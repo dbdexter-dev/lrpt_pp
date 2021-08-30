@@ -3,6 +3,7 @@
 
 #include "hvc.c"
 #include "hvc_precip.c"
+#include "thermal.c"
 #include "vegetation.c"
 
 #endif

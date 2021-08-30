@@ -2,12 +2,13 @@
 #include "channel.h"
 
 void
-channel_init(Channel *ch, int width, int height, uint8_t *pixbuf)
+channel_init(Channel *ch, int width, int height, int rowstride, uint8_t *pixbuf)
 {
 	if (!ch) return;
 
 	ch->width = width;
 	ch->height = height;
+	ch->rowstride = rowstride;
 
 	/* Initialize mutex */
 	pthread_mutex_init(&ch->mutex, NULL);
@@ -17,7 +18,7 @@ channel_init(Channel *ch, int width, int height, uint8_t *pixbuf)
 		ch->pixbuf = pixbuf;
 		ch->owned = 0;
 	} else {
-		ch->pixbuf = malloc(width*height*3);
+		ch->pixbuf = malloc(height*rowstride);
 		ch->owned = 1;
 	}
 }
