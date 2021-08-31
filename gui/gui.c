@@ -3,6 +3,7 @@
 static GtkViewport *img_viewport;
 static GtkImage *img_composite;
 static GtkWindow *window_main;
+static GtkWindow *window_about;
 static GtkMenuItem *menu_save;
 
 void
@@ -13,6 +14,7 @@ gui_init(GtkBuilder *builder)
 	menu_save = GTK_MENU_ITEM(gtk_builder_get_object(builder, "menu_save"));
 
 	window_main = GTK_WINDOW(gtk_builder_get_object(builder, "window_main"));
+	window_about = GTK_WINDOW(gtk_builder_get_object(builder, "window_about"));
 	gtk_builder_connect_signals(builder, NULL);
 	g_object_unref(builder);
 
@@ -25,10 +27,16 @@ on_window_main_destroy()
 	gtk_main_quit();
 }
 
-GtkWindow*
-gui_main_window()
+void
+on_window_about_close()
 {
-	return window_main;
+	gtk_widget_hide(GTK_WIDGET(window_about));
+}
+
+void
+show_about()
+{
+	gtk_widget_show(GTK_WIDGET(window_about));
 }
 
 void

@@ -74,6 +74,13 @@ on_menu_quit_activate()
 }
 
 gboolean
+on_menu_about_activate()
+{
+	show_about();
+	return FALSE;
+}
+
+gboolean
 on_menu_open_activate()
 {
 	GtkWidget *dialog;
