@@ -9,4 +9,7 @@
 #define MAX(x, y) (((x)>(y)) ? (x) : (y))
 #endif
 
+void usage(const char *pname);
+void version();
+
 #endif

@@ -19,6 +19,12 @@ gui_init(GtkBuilder *builder)
 	gtk_widget_show(GTK_WIDGET(window_main));
 }
 
+void
+on_window_main_destroy()
+{
+	gtk_main_quit();
+}
+
 GtkWindow*
 gui_main_window()
 {

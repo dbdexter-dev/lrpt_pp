@@ -11,7 +11,7 @@ static char _last_saved_fname[128] = {0};
 
 
 gboolean
-on_radio_enha_normal_toggled(GtkRadioButton *button)
+on_radio_enha_none_toggled(GtkRadioButton *button)
 {
 	if (!gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(button))) return FALSE;
 	composite_set_enhancement(NONE, update_composite);

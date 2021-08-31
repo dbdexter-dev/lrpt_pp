@@ -2,6 +2,33 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkAboutDialog" id="window_about">
+    <property name="can-focus">False</property>
+    <property name="type-hint">dialog</property>
+    <property name="program-name">Glade</property>
+    <property name="logo-icon-name">image-missing</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkWindow" id="window_main">
     <property name="can-focus">False</property>
     <signal name="destroy" handler="on_window_main_destroy" swapped="no"/>
@@ -109,14 +136,14 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <child>
-                              <object class="GtkRadioMenuItem" id="radio_enha_normal">
+                              <object class="GtkRadioMenuItem" id="radio_enha_none">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">_Normal</property>
+                                <property name="label" translatable="yes">_None</property>
                                 <property name="use-underline">True</property>
                                 <property name="active">True</property>
                                 <property name="draw-as-radio">True</property>
-                                <signal name="toggled" handler="on_radio_enha_normal_toggled" swapped="no"/>
+                                <signal name="toggled" handler="on_radio_enha_none_toggled" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -126,7 +153,7 @@
                                 <property name="label" translatable="yes">RGB _122</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-as-radio">True</property>
-                                <property name="group">radio_enha_normal</property>
+                                <property name="group">radio_enha_none</property>
                                 <signal name="toggled" handler="on_radio_enha_122_toggled" swapped="no"/>
                               </object>
                             </child>
@@ -137,7 +164,7 @@
                                 <property name="label" translatable="yes">RGB _211</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-as-radio">True</property>
-                                <property name="group">radio_enha_normal</property>
+                                <property name="group">radio_enha_none</property>
                                 <signal name="toggled" handler="on_radio_enha_211_toggled" swapped="no"/>
                               </object>
                             </child>
@@ -148,7 +175,7 @@
                                 <property name="label" translatable="yes">_Vegetation</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-as-radio">True</property>
-                                <property name="group">radio_enha_normal</property>
+                                <property name="group">radio_enha_none</property>
                                 <signal name="toggled" handler="on_radio_enha_vegetation_toggled" swapped="no"/>
                               </object>
                             </child>
@@ -159,7 +186,7 @@
                                 <property name="label" translatable="yes">_HVC</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-as-radio">True</property>
-                                <property name="group">radio_enha_normal</property>
+                                <property name="group">radio_enha_none</property>
                                 <signal name="toggled" handler="on_radio_enha_hvc_toggled" swapped="no"/>
                               </object>
                             </child>
@@ -170,7 +197,7 @@
                                 <property name="label" translatable="yes">HVC (with precipitation)</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-as-radio">True</property>
-                                <property name="group">radio_enha_normal</property>
+                                <property name="group">radio_enha_none</property>
                                 <signal name="toggled" handler="on_radio_enha_hvc_precip_toggled" swapped="no"/>
                               </object>
                             </child>
@@ -181,7 +208,7 @@
                                 <property name="label" translatable="yes">_Thermal</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-as-radio">True</property>
-                                <property name="group">radio_enha_normal</property>
+                                <property name="group">radio_enha_none</property>
                                 <signal name="toggled" handler="on_radio_enha_thermal_toggled" swapped="no"/>
                               </object>
                             </child>
@@ -204,12 +231,12 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem">
-                        <property name="label">gtk-about</property>
+                      <object class="GtkMenuItem" id="menu_about">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">_About</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
+                        <signal name="activate" handler="on_menu_about_activate" swapped="no"/>
                       </object>
                     </child>
                   </object>

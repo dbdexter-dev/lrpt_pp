@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <pthread.h>
-#include "channel.h"
 #include "composite.h"
+#include "image.h"
 
 typedef struct {
 	void (*kernel)(int, int, int, uint8_t*, uint8_t*);
@@ -10,21 +10,21 @@ typedef struct {
 
 static void* composite_apply_kernel(void *args);
 
-static Channel _original, _composite;
+static Image _original, _composite;
 static Args _a;
 
 void
 composite_init(uint8_t *base, int width, int height, int rowstride)
 {
-	channel_init(&_original, width, height, rowstride, base);
-	channel_init(&_composite, width, height, rowstride, NULL);
+	image_init(&_original, width, height, rowstride, base);
+	image_init(&_composite, width, height, rowstride, NULL);
 }
 
 void
 composite_deinit()
 {
-	channel_deinit(&_original);
-	channel_deinit(&_composite);
+	image_deinit(&_original);
+	image_deinit(&_composite);
 }
 
 void
@@ -94,13 +94,13 @@ composite_apply_kernel(void *args)
 uint8_t*
 composite_get_pixels()
 {
-	return channel_get_pixels(&_composite);
+	return image_get_pixels(&_composite);
 }
 
 void
 composite_release_pixels()
 {
-	channel_release_pixels(&_composite);
+	image_release_pixels(&_composite);
 }
 
 int

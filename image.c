@@ -1,8 +1,8 @@
 #include <stdlib.h>
-#include "channel.h"
+#include "image.h"
 
 void
-channel_init(Channel *ch, int width, int height, int rowstride, uint8_t *pixbuf)
+image_init(Image *ch, int width, int height, int rowstride, uint8_t *pixbuf)
 {
 	if (!ch) return;
 
@@ -24,7 +24,7 @@ channel_init(Channel *ch, int width, int height, int rowstride, uint8_t *pixbuf)
 }
 
 void
-channel_deinit(Channel *ch)
+image_deinit(Image *ch)
 {
 	pthread_mutex_destroy(&ch->mutex);
 	if (ch->owned) free(ch->pixbuf);
@@ -33,14 +33,14 @@ channel_deinit(Channel *ch)
 }
 
 uint8_t*
-channel_get_pixels(Channel *ch)
+image_get_pixels(Image *ch)
 {
 	pthread_mutex_lock(&ch->mutex);
 	return ch->pixbuf;
 }
 
 void
-channel_release_pixels(Channel *ch)
+image_release_pixels(Image *ch)
 {
 	pthread_mutex_unlock(&ch->mutex);
 }
