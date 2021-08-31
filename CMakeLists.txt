@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(meteor_postprocess
+project(lrpt_pp
 	VERSION 1.0
 	DESCRIPTION "LRPT image postprocessor"
 	LANGUAGES C)
@@ -71,16 +71,12 @@ set(COMMON_INC_DIRS
 )
 
 # Main executable target
-add_executable(meteor_postprocess main.c ${COMMON_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_C})
-target_include_directories(meteor_postprocess PUBLIC ${COMMON_INC_DIRS})
-target_link_libraries(meteor_postprocess PUBLIC ${GTK_LIBRARIES} pthread)
+add_executable(lrpt_pp main.c ${COMMON_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/${GRESOURCE_C})
+target_include_directories(lrpt_pp PUBLIC ${COMMON_INC_DIRS})
+target_link_libraries(lrpt_pp PUBLIC ${GTK_LIBRARIES} pthread)
 
-# Add links to ncurses if enabled
-# if (ENABLE_TUI AND NCURSES_LIBRARY)
-# target_link_libraries(meteor_demod PUBLIC ${NCURSES_LIBRARY})
-# endif()
 
-install(TARGETS meteor_postprocess DESTINATION bin)
+install(TARGETS lrpt_pp DESTINATION bin)
 
 # uninstall target
 if(NOT TARGET uninstall)

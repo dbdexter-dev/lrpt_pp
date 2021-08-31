@@ -8,7 +8,7 @@ char*
 save_composite(char *fname)
 {
 	const char *default_ext = "png";
-	char *extptr;
+	const char *extptr;
 	GError *error = NULL;
 	uint8_t *pixels;
 	GdkPixbuf *pixbuf;
