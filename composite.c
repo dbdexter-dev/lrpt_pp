@@ -11,13 +11,20 @@ typedef struct {
 static void* composite_apply_kernel(void *args);
 
 static Image _original, _composite;
+static int initialized = 0;
 static Args _a;
 
 void
 composite_init(uint8_t *base, int width, int height, int rowstride)
 {
+	/* If already initialized, free the underlying buffers first */
+	if (initialized) {
+		composite_deinit();
+	}
+
 	image_init(&_original, width, height, rowstride, base);
 	image_init(&_composite, width, height, rowstride, NULL);
+	initialized = 1;
 }
 
 void

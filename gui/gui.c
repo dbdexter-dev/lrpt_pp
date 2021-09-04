@@ -5,6 +5,7 @@ static GtkImage *img_composite;
 static GtkWindow *window_main;
 static GtkWindow *window_about;
 static GtkMenuItem *menu_save;
+GtkImage *_base_image = NULL;
 
 void
 gui_init(GtkBuilder *builder)
@@ -24,6 +25,7 @@ gui_init(GtkBuilder *builder)
 void
 on_window_main_destroy()
 {
+	if (_base_image) g_object_unref(_base_image);
 	gtk_main_quit();
 }
 

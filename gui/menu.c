@@ -5,7 +5,6 @@
 
 extern void on_window_main_destroy();
 
-static GtkImage *_composite;
 static Enhancement _last_enhancement = NONE;
 static char _last_saved_fname[128] = {0};
 
@@ -86,7 +85,7 @@ on_menu_open_activate()
 	GtkWidget *dialog;
 	GdkPixbuf *pixbuf;
 	int width, height, rowstride;
-	int result;
+	int result, deinit_composite;
 	char *fname;
 
 	dialog = gtk_file_chooser_dialog_new(
@@ -103,15 +102,16 @@ on_menu_open_activate()
 
 	switch (result) {
 		case GTK_RESPONSE_ACCEPT:
-			if (_composite) {
-				g_object_ref_sink(_composite);
-				_composite = NULL;
+			if (_base_image) {
+				g_object_unref(_base_image);
+				_base_image = NULL;
 			}
 
 			/* Load composite from file */
 			fname = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-			_composite = GTK_IMAGE(gtk_image_new_from_file(fname));
-			pixbuf = gtk_image_get_pixbuf(_composite);
+			_base_image = GTK_IMAGE(gtk_image_new_from_file(fname));
+			g_object_ref_sink(_base_image); /* Take ownership of the object */
+			pixbuf = gtk_image_get_pixbuf(_base_image);
 
 			/* Update composite channels */
 			width = gdk_pixbuf_get_width(pixbuf);
@@ -120,8 +120,10 @@ on_menu_open_activate()
 			composite_init(gdk_pixbuf_get_pixels(pixbuf), width, height, rowstride);
 			composite_set_enhancement(_last_enhancement, update_composite);
 
+			/* Update UI elements */
 			update_title(fname);
 			set_save_sens(TRUE);
+
 			g_free(fname);
 			break;
 		case GTK_RESPONSE_CANCEL:

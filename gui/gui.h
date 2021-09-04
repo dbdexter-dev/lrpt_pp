@@ -3,6 +3,8 @@
 
 #include <gtk/gtk.h>
 
+extern GtkImage *_base_image;
+
 void gui_init(GtkBuilder *builder);
 void update_composite();
 void update_title(char *title);

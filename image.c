@@ -26,7 +26,6 @@ image_init(Image *ch, int width, int height, int rowstride, uint8_t *pixbuf)
 void
 image_deinit(Image *ch)
 {
-	pthread_mutex_destroy(&ch->mutex);
 	if (ch->owned) free(ch->pixbuf);
 	ch->pixbuf = NULL;
 	ch->owned = 0;

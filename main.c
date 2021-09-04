@@ -56,7 +56,6 @@ main(int argc, char *argv[])
 		gui_init(gtk_builder);
 
 		gtk_main();
-		return 0;
 	} else {
 #endif
 	if (!enha_str) {
@@ -95,6 +94,7 @@ main(int argc, char *argv[])
 	}   /* if (start_gui) {} else {*/
 #endif
 
+	composite_deinit();
 	return 0;
 }
 
