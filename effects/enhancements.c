@@ -9,74 +9,84 @@ static void clut1d(int offset, int width, int height, int rowstride, uint8_t *sr
 static void clut2d(int offset_x, int offset_y, int width, int height, int rowstride, uint8_t *src, uint8_t *dst, const uint8_t *table);
 
 void
-enhancement_none(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
+enhance_none(Image *dst, Image *src)
 {
-	memcpy(dst, src, height*rowstride);
+	memcpy(dst->pixbuf, src->pixbuf, src->height*src->rowstride);
 }
 
 void
-enhancement_122(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
+enhance_122(Image *dst, Image *src)
 {
 	int i, j;
 
-	for (i=0; i<height; i++) {
-		for (j=0; j<3*width; j+=3) {
+	uint8_t *src_pixbuf, *dst_pixbuf;
+
+	src_pixbuf = src->pixbuf;
+	dst_pixbuf = dst->pixbuf;
+
+	for (i=0; i<dst->height; i++) {
+		for (j=0; j<3*dst->width; j+=3) {
 			/* Red <- green */
-			dst[j+0] = src[j+1];
+			dst_pixbuf[j+0] = src_pixbuf[j+1];
 			/* Green <- green */
-			dst[j+1] = src[j+1];
+			dst_pixbuf[j+1] = src_pixbuf[j+1];
 			/* Blue <- blue */
-			dst[j+2] = src[j+2];
+			dst_pixbuf[j+2] = src_pixbuf[j+2];
 		}
 
-		src += rowstride;
-		dst += rowstride;
+		src_pixbuf += src->rowstride;
+		dst_pixbuf += dst->rowstride;
 	}
 }
 
 void
-enhancement_211(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
+enhance_211(Image *dst, Image *src)
 {
 	int i, j;
 
-	for (i=0; i<height; i++) {
-		for (j=0; j<3*width; j+=3) {
+	uint8_t *src_pixbuf, *dst_pixbuf;
+
+	src_pixbuf = src->pixbuf;
+	dst_pixbuf = dst->pixbuf;
+
+	for (i=0; i<dst->height; i++) {
+		for (j=0; j<3*dst->width; j+=3) {
 			/* Red <- green */
-			dst[j+0] = src[j+1];
+			dst_pixbuf[j+0] = src_pixbuf[j+1];
 			/* Green <- blue */
-			dst[j+1] = src[j+2];
+			dst_pixbuf[j+1] = src_pixbuf[j+2];
 			/* Blue <- blue*/
-			dst[j+2] = src[j+2];
+			dst_pixbuf[j+2] = src_pixbuf[j+2];
 
 		}
 
-		src += rowstride;
-		dst += rowstride;
+		src_pixbuf += src->rowstride;
+		dst_pixbuf += dst->rowstride;
 	}
 }
 
 void
-enhancement_vegetation(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
+enhance_vegetation(Image *dst, Image *src)
 {
-	clut2d(2, 1, width, height, rowstride, src, dst, vegetation_clut.pixel_data);
+	clut2d(2, 1, dst->width, dst->height, dst->rowstride, src->pixbuf, dst->pixbuf, vegetation_clut.pixel_data);
 }
 
 void
-enhancement_hvc(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
+enhance_hvc(Image *dst, Image *src)
 {
-	clut2d(0, 1, width, height, rowstride, src, dst, hvc_clut.pixel_data);
+	clut2d(0, 1, dst->width, dst->height, dst->rowstride, src->pixbuf, dst->pixbuf, hvc_clut.pixel_data);
 }
 
 void
-enhancement_hvc_precip(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
+enhance_hvc_precip(Image *dst, Image *src)
 {
-	clut2d(0, 1, width, height, rowstride, src, dst, hvc_precip_clut.pixel_data);
+	clut2d(0, 1, dst->width, dst->height, dst->rowstride, src->pixbuf, dst->pixbuf, hvc_precip_clut.pixel_data);
 }
 
 void
-enhancement_thermal(int width, int height, int rowstride, uint8_t *src, uint8_t *dst)
+enhance_thermal(Image *dst, Image *src)
 {
-	clut1d(0, width, height, rowstride, src, dst, thermal_clut.pixel_data);
+	clut1d(0, dst->width, dst->height, dst->rowstride, src->pixbuf, dst->pixbuf, thermal_clut.pixel_data);
 }
 
 

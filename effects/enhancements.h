@@ -2,6 +2,7 @@
 #define enhancements_h
 
 #include <stdint.h>
+#include "image.h"
 
 typedef enum {
 	NONE,
@@ -15,12 +16,12 @@ typedef enum {
 
 char *enhancement_str(Enhancement e);
 
-void enhancement_none(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);
-void enhancement_122(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);
-void enhancement_211(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);
-void enhancement_vegetation(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);
-void enhancement_thermal(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);
-void enhancement_hvc(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);
-void enhancement_hvc_precip(int width, int height, int rowstride, uint8_t *dst, uint8_t *src);
+void enhance_none(Image *dst, Image *src);
+void enhance_122(Image *dst, Image *src);
+void enhance_211(Image *dst, Image *src);
+void enhance_vegetation(Image *dst, Image *src);
+void enhance_thermal(Image *dst, Image *src);
+void enhance_hvc(Image *dst, Image *src);
+void enhance_hvc_precip(Image *dst, Image *src);
 
 #endif

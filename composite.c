@@ -4,13 +4,16 @@
 #include "image.h"
 
 typedef struct {
-	void (*kernel)(int, int, int, uint8_t*, uint8_t*);
+	void (*kernel)(Image*, Image*);
 	void (*callback)();
+	Image *dst, *src;
 } Args;
 
 static void* composite_apply_kernel(void *args);
 
-static Image _original, _composite;
+static Image _images[3];
+static int _unenhanced_image = 0;
+static int _output_image = 0;
 static int initialized = 0;
 static Args _a;
 
@@ -22,44 +25,49 @@ composite_init(uint8_t *base, int width, int height, int rowstride, int bpp)
 		composite_deinit();
 	}
 
-	image_init(&_original, width, height, rowstride, bpp, base);
-	image_init(&_composite, width, height, _original.rowstride, 24, NULL);
+	image_init(&_images[0], width, height, rowstride, bpp, base);
+	image_init(&_images[1], width, height, _images[0].rowstride, 24, NULL);
+	_output_image = 1;
+	_unenhanced_image = 0;
 	initialized = 1;
 }
 
 void
 composite_deinit()
 {
-	image_deinit(&_original);
-	image_deinit(&_composite);
+	int i;
+
+	for (i=0; i<_output_image; i++) {
+		image_deinit(&_images[i]);
+	}
 }
 
 void
 composite_set_enhancement(Enhancement e, void(*callback)())
 {
-	void (*kernel)(int, int, int, uint8_t*, uint8_t*) = enhancement_none;
+	void (*kernel)(Image*, Image*) = enhance_none;
 	pthread_t tid;
 
 	switch (e) {
 		case NONE:
 			break;
 		case VISIBLE:
-			kernel = enhancement_122;
+			kernel = enhance_122;
 			break;
 		case VEGETATION:
-			kernel = enhancement_vegetation;
+			kernel = enhance_vegetation;
 			break;
 		case VEG_IR:
-			kernel = enhancement_211;
+			kernel = enhance_211;
 			break;
 		case THERMAL:
-			kernel = enhancement_thermal;
+			kernel = enhance_thermal;
 			break;
 		case HVC:
-			kernel = enhancement_hvc;
+			kernel = enhance_hvc;
 			break;
 		case HVC_PRECIP:
-			kernel = enhancement_hvc_precip;
+			kernel = enhance_hvc_precip;
 			break;
 		default:
 			printf("Unknown enhancement: %d\n", e);
@@ -68,6 +76,10 @@ composite_set_enhancement(Enhancement e, void(*callback)())
 
 	_a.kernel = kernel;
 	_a.callback = callback;
+	_a.src = &_images[_unenhanced_image];
+	_a.dst = &_images[_output_image];
+
+	printf("Enhancing %p to %p\n", _a.src, _a.dst);
 
 	pthread_create(&tid, NULL, composite_apply_kernel, (void*)&_a);
 }
@@ -75,21 +87,11 @@ composite_set_enhancement(Enhancement e, void(*callback)())
 void*
 composite_apply_kernel(void *args)
 {
-	uint8_t *src, *dst;
-	int width, height, rowstride;
 	const Args *a = (Args*)args;
 
-	pthread_mutex_lock(&_composite.mutex);
-
-	src = _original.pixbuf;
-	dst = _composite.pixbuf;
-	width = _original.width;
-	height = _original.height;
-	rowstride = _original.rowstride;
-
-	a->kernel(width, height, rowstride, src, dst);
-
-	pthread_mutex_unlock(&_composite.mutex);
+	pthread_mutex_lock(&a->dst->mutex);
+	a->kernel(a->dst, a->src);
+	pthread_mutex_unlock(&a->dst->mutex);
 
 	a->callback();
 	return NULL;
@@ -99,27 +101,27 @@ composite_apply_kernel(void *args)
 uint8_t*
 composite_get_pixels()
 {
-	return image_get_pixels(&_composite);
+	return image_get_pixels(&_images[_output_image]);
 }
 
 void
 composite_release_pixels()
 {
-	image_release_pixels(&_composite);
+	image_release_pixels(&_images[_output_image]);
 }
 
 int
 composite_get_width()
 {
-	return _composite.width;
+	return _images[_output_image].width;
 }
 int
 composite_get_height()
 {
-	return _composite.height;
+	return _images[_output_image].height;
 }
 int
 composite_get_rowstride()
 {
-	return _composite.rowstride;
+	return _images[_output_image].rowstride;
 }
