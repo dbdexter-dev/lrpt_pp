@@ -15,15 +15,15 @@ static int initialized = 0;
 static Args _a;
 
 void
-composite_init(uint8_t *base, int width, int height, int rowstride)
+composite_init(uint8_t *base, int width, int height, int rowstride, int bpp)
 {
 	/* If already initialized, free the underlying buffers first */
 	if (initialized) {
 		composite_deinit();
 	}
 
-	image_init(&_original, width, height, rowstride, base);
-	image_init(&_composite, width, height, rowstride, NULL);
+	image_init(&_original, width, height, rowstride, bpp, base);
+	image_init(&_composite, width, height, _original.rowstride, 24, NULL);
 	initialized = 1;
 }
 
@@ -78,8 +78,6 @@ composite_apply_kernel(void *args)
 	uint8_t *src, *dst;
 	int width, height, rowstride;
 	const Args *a = (Args*)args;
-
-	printf("Applying kernel %p\n", a->kernel);
 
 	pthread_mutex_lock(&_composite.mutex);
 

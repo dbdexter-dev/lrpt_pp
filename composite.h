@@ -3,7 +3,7 @@
 
 #include "effects/enhancements.h"
 
-void composite_init(uint8_t *base_img, int width, int height, int rowstride);
+void composite_init(uint8_t *base_img, int width, int height, int rowstride, int bpp);
 void composite_deinit();
 
 void composite_set_enhancement(Enhancement e, void(*callback)());
