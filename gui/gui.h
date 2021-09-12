@@ -11,6 +11,7 @@ void update_title(char *title);
 
 int get_scrollable_image_width();
 int get_scrollable_image_height();
+void preview_set_scroll(float scroll_w, float scroll_h);
 
 void set_save_sens(gboolean sens);
 

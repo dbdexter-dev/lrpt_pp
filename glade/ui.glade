@@ -294,6 +294,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <signal name="draw" handler="on_image_composite_draw" swapped="no"/>
+                        <signal name="size-allocate" handler="on_composite_zoom_changed" swapped="no"/>
                       </object>
                     </child>
                   </object>

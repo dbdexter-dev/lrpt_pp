@@ -84,7 +84,7 @@ on_menu_open_activate()
 {
 	GtkWidget *dialog;
 	GdkPixbuf *pixbuf;
-	int width, height, rowstride;
+	int width, height, rowstride, bpp;
 	int result, deinit_composite;
 	char *fname;
 
@@ -117,7 +117,8 @@ on_menu_open_activate()
 			width = gdk_pixbuf_get_width(pixbuf);
 			height = gdk_pixbuf_get_height(pixbuf);
 			rowstride = gdk_pixbuf_get_rowstride(pixbuf);
-			composite_init(gdk_pixbuf_get_pixels(pixbuf), width, height, rowstride);
+			bpp = gdk_pixbuf_get_bits_per_sample(pixbuf) * gdk_pixbuf_get_n_channels(pixbuf);
+			composite_init(gdk_pixbuf_get_pixels(pixbuf), width, height, rowstride, bpp);
 			composite_set_enhancement(_last_enhancement, update_composite);
 
 			/* Update UI elements */
@@ -175,7 +176,7 @@ on_menu_save_activate()
 				if (errmsg) {
 					/* Save failure: show popup */
 					err_dialog = gtk_message_dialog_new(
-							dialog,
+							GTK_MESSAGE_DIALOG(dialog),
 							GTK_DIALOG_DESTROY_WITH_PARENT,
 							GTK_MESSAGE_ERROR,
 							GTK_BUTTONS_CLOSE,

@@ -64,6 +64,29 @@ on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
 gboolean
 on_image_composite_button_release_event(GtkWidget *widget, GdkEvent *e, gpointer p)
 {
+	float x, y, w, h;
+	float scroll_w, scroll_h;
+
+
+	/* Toggle zoom */
 	_zoom = !_zoom;
+
+	/* Scroll so that the clicked point is in the middle of the screen */
+	if (_zoom) {
+		x = e->button.x;
+		y = e->button.y;
+
+		w = gtk_widget_get_allocated_width(widget);
+		h = gtk_widget_get_allocated_height(widget);
+
+		scroll_w = x/w;
+		scroll_h = y/h;
+	}
+
 	update_composite();
+
+	/* Apply scroll offsets if necessary */
+	if (_zoom) {
+		preview_set_scroll(scroll_w, scroll_h);
+	}
 }
