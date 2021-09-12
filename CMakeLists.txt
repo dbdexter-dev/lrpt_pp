@@ -59,6 +59,7 @@ endif()
 
 set(COMMON_SOURCES
 	effects/enhancements.c effects/enhancements.h
+	effects/rectify.c effects/rectify.h
 
 	palettes/palettes.h
 
@@ -84,11 +85,11 @@ set(COMMON_INC_DIRS
 if (ENABLE_GUI)
 	add_executable(lrpt_pp main.c ${COMMON_SOURCES} ${GTK_SOURCES})
 	target_include_directories(lrpt_pp PUBLIC ${COMMON_INC_DIRS})
-	target_link_libraries(lrpt_pp PUBLIC ${GTK_LIBRARIES} pthread)
+	target_link_libraries(lrpt_pp PUBLIC ${GTK_LIBRARIES} m pthread)
 else()
 	add_executable(lrpt_pp main.c ${COMMON_SOURCES})
 	target_include_directories(lrpt_pp PUBLIC ${COMMON_INC_DIRS})
-	target_link_libraries(lrpt_pp PUBLIC pthread)
+	target_link_libraries(lrpt_pp PUBLIC m pthread)
 endif()
 
 

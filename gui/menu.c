@@ -4,8 +4,10 @@
 #include "save.h"
 
 extern void on_window_main_destroy();
+static void rectify_callback();
 
 static Enhancement _last_enhancement = NONE;
+static int _rectified = 0;
 static char _last_saved_fname[128] = {0};
 
 
@@ -66,6 +68,14 @@ on_radio_enha_thermal_toggled(GtkRadioButton *button)
 }
 
 gboolean
+on_check_rectify_toggled(GtkCheckMenuItem *button)
+{
+	composite_set_rectify(gtk_check_menu_item_get_active(button), rectify_callback);
+	_rectified = gtk_check_menu_item_get_active(button);
+	return FALSE;
+}
+
+gboolean
 on_menu_quit_activate()
 {
 	on_window_main_destroy();
@@ -119,7 +129,8 @@ on_menu_open_activate()
 			rowstride = gdk_pixbuf_get_rowstride(pixbuf);
 			bpp = gdk_pixbuf_get_bits_per_sample(pixbuf) * gdk_pixbuf_get_n_channels(pixbuf);
 			composite_init(gdk_pixbuf_get_pixels(pixbuf), width, height, rowstride, bpp);
-			composite_set_enhancement(_last_enhancement, update_composite);
+			composite_set_rectify(_rectified, rectify_callback);
+			//composite_set_enhancement(_last_enhancement, update_composite);
 
 			/* Update UI elements */
 			update_title(fname);
@@ -200,4 +211,10 @@ on_menu_save_activate()
 
 	gtk_widget_destroy(dialog);
 
+}
+
+static void
+rectify_callback()
+{
+	composite_set_enhancement(_last_enhancement, update_composite);
 }

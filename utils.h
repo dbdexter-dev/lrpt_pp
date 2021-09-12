@@ -9,6 +9,8 @@
 #define MAX(x, y) (((x)>(y)) ? (x) : (y))
 #endif
 
+#define LEN(x) (sizeof(x) / sizeof(*x))
+
 void usage(const char *pname);
 void version();
 

@@ -2,6 +2,7 @@
 #include <pthread.h>
 #include "composite.h"
 #include "image.h"
+#include "utils.h"
 
 typedef struct {
 	void (*kernel)(Image*, Image*);
@@ -12,6 +13,7 @@ typedef struct {
 static void* composite_apply_kernel(void *args);
 
 static Image _images[3];
+static int _orig_image = 0;
 static int _unenhanced_image = 0;
 static int _output_image = 0;
 static int initialized = 0;
@@ -27,8 +29,10 @@ composite_init(uint8_t *base, int width, int height, int rowstride, int bpp)
 
 	image_init(&_images[0], width, height, rowstride, bpp, base);
 	image_init(&_images[1], width, height, _images[0].rowstride, 24, NULL);
+	image_init(&_images[2], width, height, _images[0].rowstride, 24, NULL);
 	_output_image = 1;
 	_unenhanced_image = 0;
+	_orig_image = 0;
 	initialized = 1;
 }
 
@@ -37,9 +41,29 @@ composite_deinit()
 {
 	int i;
 
-	for (i=0; i<_output_image; i++) {
+	for (i=0; i<LEN(_images); i++) {
 		image_deinit(&_images[i]);
 	}
+}
+
+void
+composite_set_rectify(int rectify, void (*callback)())
+{
+	pthread_t tid;
+
+	if (rectify) {
+		_a.kernel = rectify_m2;
+		_a.callback = callback;
+		_a.src = &_images[_unenhanced_image];
+		_a.dst = &_images[2];
+
+		pthread_create(&tid, NULL, composite_apply_kernel, (void*)&_a);
+		_unenhanced_image = 2;
+	} else {
+		_unenhanced_image = 0;
+		if (callback) callback();
+	}
+
 }
 
 void
@@ -79,6 +103,11 @@ composite_set_enhancement(Enhancement e, void(*callback)())
 	_a.src = &_images[_unenhanced_image];
 	_a.dst = &_images[_output_image];
 
+	if (_a.src->width != _a.dst->width) {
+		image_deinit(_a.dst);
+		image_init(_a.dst, _a.src->width, _a.src->height, _a.src->rowstride, 24, NULL);
+	}
+
 	printf("Enhancing %p to %p\n", _a.src, _a.dst);
 
 	pthread_create(&tid, NULL, composite_apply_kernel, (void*)&_a);
@@ -93,7 +122,7 @@ composite_apply_kernel(void *args)
 	a->kernel(a->dst, a->src);
 	pthread_mutex_unlock(&a->dst->mutex);
 
-	a->callback();
+	if (a->callback) a->callback();
 	return NULL;
 }
 
