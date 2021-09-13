@@ -58,6 +58,17 @@ image_deinit(Image *ch)
 	ch->owned = 0;
 }
 
+void
+image_resize_match(Image *ch, const Image *orig)
+{
+	if (ch->width == orig->width && ch->height == orig->height && ch->rowstride == orig->rowstride) return;
+
+	if (ch->pixbuf) image_deinit(ch);
+
+	image_init(ch, orig->width, orig->height, orig->rowstride, 24, NULL);
+}
+
+
 uint8_t*
 image_get_pixels(Image *ch)
 {

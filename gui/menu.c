@@ -5,9 +5,11 @@
 
 extern void on_window_main_destroy();
 static void rectify_callback();
+static void sharpen_callback();
 
 static Enhancement _last_enhancement = NONE;
 static int _rectified = 0;
+static int _sharpened = 0;
 static char _last_saved_fname[128] = {0};
 
 
@@ -70,8 +72,16 @@ on_radio_enha_thermal_toggled(GtkRadioButton *button)
 gboolean
 on_check_rectify_toggled(GtkCheckMenuItem *button)
 {
-	composite_set_rectify(gtk_check_menu_item_get_active(button), rectify_callback);
 	_rectified = gtk_check_menu_item_get_active(button);
+	composite_set_rectify(_rectified, rectify_callback);
+	return FALSE;
+}
+
+gboolean
+on_check_sharpen_toggled(GtkCheckMenuItem *button)
+{
+	_sharpened = gtk_check_menu_item_get_active(button);
+	composite_set_sharpen(_sharpened, sharpen_callback);
 	return FALSE;
 }
 
@@ -215,6 +225,12 @@ on_menu_save_activate()
 
 static void
 rectify_callback()
+{
+	composite_set_sharpen(_sharpened, sharpen_callback);
+}
+
+static void
+sharpen_callback()
 {
 	composite_set_enhancement(_last_enhancement, update_composite);
 }

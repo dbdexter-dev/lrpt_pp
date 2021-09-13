@@ -13,6 +13,7 @@ typedef struct {
 
 void image_init(Image *ch, int width, int height, int rowstride, int bpp, uint8_t *pixbuf);
 void image_deinit(Image *ch);
+void image_resize_match(Image *ch, const Image *orig);
 
 uint8_t* image_get_pixels(Image *ch);
 void image_release_pixels(Image *ch);

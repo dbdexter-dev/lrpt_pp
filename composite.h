@@ -9,6 +9,7 @@ void composite_deinit();
 
 void composite_set_enhancement(Enhancement e, void(*callback)());
 void composite_set_rectify(int rectify, void(*callback)());
+void composite_set_sharpen(int sharpen, void(*callback)());
 
 uint8_t* composite_get_pixels();
 void composite_release_pixels();

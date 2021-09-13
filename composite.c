@@ -12,10 +12,8 @@ typedef struct {
 
 static void* composite_apply_kernel(void *args);
 
-static Image _images[3];
-static int _orig_image = 0;
-static int _unenhanced_image = 0;
-static int _output_image = 0;
+static Image _original, _rectified, _sharpened, _enhanced;
+static Image *_to_rectify, *_to_sharpen, *_to_enhance, *_output;
 static int initialized = 0;
 static Args _a;
 
@@ -27,22 +25,24 @@ composite_init(uint8_t *base, int width, int height, int rowstride, int bpp)
 		composite_deinit();
 	}
 
-	image_init(&_images[0], width, height, rowstride, bpp, base);
-	image_init(&_images[1], width, height, _images[0].rowstride, 24, NULL);
-	image_init(&_images[2], width, height, _images[0].rowstride, 24, NULL);
-	_output_image = 1;
-	_unenhanced_image = 0;
-	_orig_image = 0;
+	image_init(&_original, width, height, rowstride, bpp, base);
+	image_init(&_rectified, width, 1, _original.rowstride, 24, NULL);
+	image_init(&_sharpened, width, 1, _original.rowstride, 24, NULL);
+	image_init(&_enhanced, width, 1, _original.rowstride, 24, NULL);
+
+	_to_rectify = _to_sharpen = _to_enhance = _output = &_original;
+
 	initialized = 1;
 }
 
 void
 composite_deinit()
 {
-	size_t i;
-
-	for (i=0; i<LEN(_images); i++) {
-		image_deinit(&_images[i]);
+	if (initialized) {
+		image_deinit(&_original);
+		image_deinit(&_rectified);
+		image_deinit(&_sharpened);
+		image_deinit(&_enhanced);
 	}
 }
 
@@ -54,16 +54,39 @@ composite_set_rectify(int rectify, void (*callback)())
 	if (rectify) {
 		_a.kernel = rectify_m2;
 		_a.callback = callback;
-		_a.src = &_images[_unenhanced_image];
-		_a.dst = &_images[2];
+		_a.src = &_original;
+		_a.dst = &_rectified;
+
+		_to_sharpen = &_rectified;
+		_to_enhance = &_rectified;
 
 		pthread_create(&tid, NULL, composite_apply_kernel, (void*)&_a);
-		_unenhanced_image = 2;
 	} else {
-		_unenhanced_image = 0;
+		_to_sharpen = &_original;
+		_to_enhance = &_original;
 		if (callback) callback();
 	}
 
+}
+
+void
+composite_set_sharpen(int sharpen, void (*callback)())
+{
+	pthread_t tid;
+
+	if (sharpen) {
+		_a.kernel = NULL;
+		_a.callback = callback;
+		_a.src = _to_sharpen;
+		_a.dst = &_sharpened;
+
+		_to_enhance = &_sharpened;
+
+		pthread_create(&tid, NULL, composite_apply_kernel, (void*)&_a);
+	} else {
+		_to_enhance = _to_sharpen;
+		if (callback) callback();
+	}
 }
 
 void
@@ -100,8 +123,8 @@ composite_set_enhancement(Enhancement e, void(*callback)())
 
 	_a.kernel = kernel;
 	_a.callback = callback;
-	_a.src = &_images[_unenhanced_image];
-	_a.dst = &_images[_output_image];
+	_a.src = _to_enhance;
+	_a.dst = &_enhanced;
 
 	if (_a.src->width != _a.dst->width) {
 		image_deinit(_a.dst);
@@ -111,6 +134,7 @@ composite_set_enhancement(Enhancement e, void(*callback)())
 	printf("Enhancing %p to %p\n", _a.src, _a.dst);
 
 	pthread_create(&tid, NULL, composite_apply_kernel, (void*)&_a);
+	_output = &_enhanced;
 }
 
 void*
@@ -118,8 +142,10 @@ composite_apply_kernel(void *args)
 {
 	const Args *a = (Args*)args;
 
+	printf("Applying kernel %p\n", a->kernel);
+
 	pthread_mutex_lock(&a->dst->mutex);
-	a->kernel(a->dst, a->src);
+	if (a->kernel) a->kernel(a->dst, a->src);
 	pthread_mutex_unlock(&a->dst->mutex);
 
 	if (a->callback) a->callback();
@@ -130,27 +156,28 @@ composite_apply_kernel(void *args)
 uint8_t*
 composite_get_pixels()
 {
-	return image_get_pixels(&_images[_output_image]);
+	if (initialized) return image_get_pixels(_output);
+	return NULL;
 }
 
 void
 composite_release_pixels()
 {
-	image_release_pixels(&_images[_output_image]);
+	if (initialized) image_release_pixels(_output);
 }
 
 int
 composite_get_width()
 {
-	return _images[_output_image].width;
+	return _output->width;
 }
 int
 composite_get_height()
 {
-	return _images[_output_image].height;
+	return _output->height;
 }
 int
 composite_get_rowstride()
 {
-	return _images[_output_image].rowstride;
+	return _output->rowstride;
 }

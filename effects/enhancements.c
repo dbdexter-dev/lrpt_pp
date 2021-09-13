@@ -11,6 +11,7 @@ static void clut2d(int offset_x, int offset_y, int width, int height, int rowstr
 void
 enhance_none(Image *dst, Image *src)
 {
+	image_resize_match(dst, src);
 	memcpy(dst->pixbuf, src->pixbuf, src->height*src->rowstride);
 }
 
@@ -20,6 +21,8 @@ enhance_122(Image *dst, Image *src)
 	int i, j;
 
 	uint8_t *src_pixbuf, *dst_pixbuf;
+
+	image_resize_match(dst, src);
 
 	src_pixbuf = src->pixbuf;
 	dst_pixbuf = dst->pixbuf;
@@ -46,6 +49,8 @@ enhance_211(Image *dst, Image *src)
 
 	uint8_t *src_pixbuf, *dst_pixbuf;
 
+	image_resize_match(dst, src);
+
 	src_pixbuf = src->pixbuf;
 	dst_pixbuf = dst->pixbuf;
 
@@ -68,24 +73,28 @@ enhance_211(Image *dst, Image *src)
 void
 enhance_vegetation(Image *dst, Image *src)
 {
+	image_resize_match(dst, src);
 	clut2d(2, 1, dst->width, dst->height, dst->rowstride, src->pixbuf, dst->pixbuf, vegetation_clut.pixel_data);
 }
 
 void
 enhance_hvc(Image *dst, Image *src)
 {
+	image_resize_match(dst, src);
 	clut2d(0, 1, dst->width, dst->height, dst->rowstride, src->pixbuf, dst->pixbuf, hvc_clut.pixel_data);
 }
 
 void
 enhance_hvc_precip(Image *dst, Image *src)
 {
+	image_resize_match(dst, src);
 	clut2d(0, 1, dst->width, dst->height, dst->rowstride, src->pixbuf, dst->pixbuf, hvc_precip_clut.pixel_data);
 }
 
 void
 enhance_thermal(Image *dst, Image *src)
 {
+	image_resize_match(dst, src);
 	clut1d(0, dst->width, dst->height, dst->rowstride, src->pixbuf, dst->pixbuf, thermal_clut.pixel_data);
 }
 
