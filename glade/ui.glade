@@ -290,6 +290,8 @@
                     <property name="valign">center</property>
                     <property name="visible-window">False</property>
                     <signal name="button-release-event" handler="on_image_composite_button_release_event" swapped="no"/>
+                    <signal name="enter-notify-event" handler="on_image_composite_crossing" swapped="no"/>
+                    <signal name="leave-notify-event" handler="on_image_composite_crossing" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="image_composite">
                         <property name="visible">True</property>

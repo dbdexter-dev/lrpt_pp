@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-	<gresource prefix="/com/dbdexter/meteor_postprocess">
+	<gresource prefix="/com/dbdexter/lrpt_pp">
 		<file>glade/ui.glade</file>
 		<file>palettes/hvc.png</file>
 		<file>palettes/thermal.png</file>

@@ -10,10 +10,11 @@
 #include "gui/gui.h"
 #endif
 
-#define SHORTOPTS "e:hv"
+#define SHORTOPTS "e:rhv"
 
 static struct option longopts[] = {
 	{ "enhance",      1, NULL, 'e' },
+	{ "rectify",      0, NULL, 'r' },
 	{ "help",         0, NULL, 'h' },
 	{ "version",      0, NULL, 'v' },
 };
@@ -30,6 +31,7 @@ main(int argc, char *argv[])
 	/* Command-line changeable parameters {{{ */
 	int start_gui = 1;
 	const char *enha_str = NULL;
+	int rectify = 0;
 	/* }}} */
 	/* Parse command-line options {{{ */
 	while ((c = getopt_long(argc, argv, SHORTOPTS, longopts, NULL)) != -1) {
@@ -37,6 +39,9 @@ main(int argc, char *argv[])
 			case 'e':
 				start_gui = 0;
 				enha_str = optarg;
+				break;
+			case 'r':
+				rectify = 1;
 				break;
 			case 'h':
 				usage(argv[0]);
@@ -52,7 +57,7 @@ main(int argc, char *argv[])
 	if (start_gui) {
 		gtk_init(&argc, &argv);
 		gtk_builder = gtk_builder_new();
-		gtk_builder_add_from_resource(gtk_builder, "/com/dbdexter/meteor_postprocess/glade/ui.glade", NULL);
+		gtk_builder_add_from_resource(gtk_builder, "/com/dbdexter/lrpt_pp/glade/ui.glade", NULL);
 		gui_init(gtk_builder);
 
 		gtk_main();
@@ -63,9 +68,13 @@ main(int argc, char *argv[])
 		return 1;
 	}
 
+	printf("Non-graphical mode not yet available.\n");
+	return 0;
+
 	/* TODO if no input file, error and exit */
 	/* TODO if no output file, generate a filename */
 	/* TODO open input file, create a Image obj */
+
 
 	if (!strcmp(enha_str, "none")) {
 		enha = NONE;
@@ -84,6 +93,10 @@ main(int argc, char *argv[])
 	} else {
 		fprintf(stderr, "Error: unknown enhancement '%s'\n", enha_str);
 		return 1;
+	}
+
+	/* TODO rectify if requested */
+	if (rectify) {
 	}
 
 	/* TODO apply enhancement to Image */

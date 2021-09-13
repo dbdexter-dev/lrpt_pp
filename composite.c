@@ -39,7 +39,7 @@ composite_init(uint8_t *base, int width, int height, int rowstride, int bpp)
 void
 composite_deinit()
 {
-	int i;
+	size_t i;
 
 	for (i=0; i<LEN(_images); i++) {
 		image_deinit(&_images[i]);

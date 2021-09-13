@@ -64,12 +64,19 @@ on_image_composite_draw(GtkWidget *widget, cairo_t *cr)
 gboolean
 on_image_composite_button_release_event(GtkWidget *widget, GdkEvent *e, gpointer p)
 {
+	GdkDisplay *display = gtk_widget_get_display(widget);
+	GdkCursor *cursor;
 	float x, y, w, h;
 	float scroll_w, scroll_h;
 
 
 	/* Toggle zoom */
 	_zoom = !_zoom;
+
+	/* Change cursor */
+	cursor = gdk_cursor_new_from_name(display, _zoom ? "zoom-out" : "zoom-in");
+	gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
+	g_object_unref(cursor);
 
 	/* Scroll so that the clicked point is in the middle of the screen */
 	if (_zoom) {
@@ -81,12 +88,30 @@ on_image_composite_button_release_event(GtkWidget *widget, GdkEvent *e, gpointer
 
 		scroll_w = x/w;
 		scroll_h = y/h;
+
+		preview_set_scroll(scroll_w, scroll_h);
 	}
 
 	update_composite();
+}
 
-	/* Apply scroll offsets if necessary */
-	if (_zoom) {
-		preview_set_scroll(scroll_w, scroll_h);
+gboolean
+on_image_composite_crossing(GtkWidget *widget, GdkEvent *e)
+{
+	GdkCursor *cursor = NULL;
+	GdkDisplay *display = gtk_widget_get_display(widget);
+
+	switch (e->crossing.type) {
+		case GDK_ENTER_NOTIFY:
+			cursor = gdk_cursor_new_from_name(display, _zoom ? "zoom-out" : "zoom-in");
+			break;
+		case GDK_LEAVE_NOTIFY:
+			cursor = gdk_cursor_new_from_name(display, "default");
+			break;
+	}
+
+	if (cursor) {
+		gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
+		g_object_unref(cursor);
 	}
 }

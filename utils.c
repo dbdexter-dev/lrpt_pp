@@ -14,6 +14,8 @@ usage(const char *pname)
 #endif
 	fprintf(stderr,
 			"   -e, --enhance <name>    Apply enhancement <name>\n"
+			"   -r, --rectify           Rectify the image\n"
+			"\n"
 			"   -h, --help              Print this help screen\n"
 			"   -v, --version           Print version info\n"
 		   );
