@@ -73,6 +73,7 @@ gboolean
 on_check_rectify_toggled(GtkCheckMenuItem *button)
 {
 	_rectified = gtk_check_menu_item_get_active(button);
+	update_worker_status("Rectifying...", 1);
 	composite_set_rectify(_rectified, rectify_callback);
 	return FALSE;
 }
@@ -81,6 +82,7 @@ gboolean
 on_check_sharpen_toggled(GtkCheckMenuItem *button)
 {
 	_sharpened = gtk_check_menu_item_get_active(button);
+	update_worker_status("Sharpening...", 1);
 	composite_set_sharpen(_sharpened, sharpen_callback);
 	return FALSE;
 }
@@ -226,11 +228,13 @@ on_menu_save_activate()
 static void
 rectify_callback()
 {
+	update_worker_status("Sharpening...", 1);
 	composite_set_sharpen(_sharpened, sharpen_callback);
 }
 
 static void
 sharpen_callback()
 {
+	update_worker_status("Idle.", 0);
 	composite_set_enhancement(_last_enhancement, update_composite);
 }

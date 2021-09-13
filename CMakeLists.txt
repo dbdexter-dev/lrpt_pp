@@ -60,6 +60,7 @@ endif()
 set(COMMON_SOURCES
 	effects/enhancements.c effects/enhancements.h
 	effects/rectify.c effects/rectify.h
+	effects/sharpen.c effects/sharpen.h
 
 	palettes/palettes.h
 

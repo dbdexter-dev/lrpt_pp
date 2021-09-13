@@ -6,6 +6,8 @@ static GtkWindow *window_main;
 static GtkWindow *window_about;
 static GtkMenuItem *menu_save;
 static GtkScrolledWindow *scrolled_composite;
+static GtkLabel *label_status;
+static GtkSpinner *spinner_status;
 GtkImage *_base_image = NULL;
 
 float _sw, _sh;
@@ -17,6 +19,8 @@ gui_init(GtkBuilder *builder)
 	viewport_composite = GTK_VIEWPORT(gtk_builder_get_object(builder, "viewport_composite"));
 	img_composite = GTK_IMAGE(gtk_builder_get_object(builder, "image_composite"));
 	scrolled_composite = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder, "scrolledwindow_composite"));
+	label_status = GTK_LABEL(gtk_builder_get_object(builder, "label_status"));
+	spinner_status = GTK_SPINNER(gtk_builder_get_object(builder, "spinner_status"));
 
 	menu_save = GTK_MENU_ITEM(gtk_builder_get_object(builder, "menu_save"));
 
@@ -63,6 +67,14 @@ int
 get_scrollable_image_height()
 {
 	return gtk_widget_get_allocated_height(GTK_WIDGET(viewport_composite));
+}
+
+void
+update_worker_status(char *msg, int active)
+{
+	gtk_label_set_text(label_status, msg);
+	if (active) gtk_spinner_start(spinner_status);
+	else gtk_spinner_stop(spinner_status);
 }
 
 gboolean

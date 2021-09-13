@@ -8,6 +8,7 @@ extern GtkImage *_base_image;
 void gui_init(GtkBuilder *builder);
 void update_composite();
 void update_title(char *title);
+void update_worker_status(char *msg, int active);
 
 int get_scrollable_image_width();
 int get_scrollable_image_height();

@@ -58,12 +58,11 @@ composite_set_rectify(int rectify, void (*callback)())
 		_a.dst = &_rectified;
 
 		_to_sharpen = &_rectified;
-		_to_enhance = &_rectified;
-
+		if (_to_enhance != _to_sharpen) _to_enhance = &_rectified;
 		pthread_create(&tid, NULL, composite_apply_kernel, (void*)&_a);
 	} else {
 		_to_sharpen = &_original;
-		_to_enhance = &_original;
+		if (_to_enhance == _to_sharpen) _to_enhance = &_original;
 		if (callback) callback();
 	}
 
@@ -75,7 +74,7 @@ composite_set_sharpen(int sharpen, void (*callback)())
 	pthread_t tid;
 
 	if (sharpen) {
-		_a.kernel = NULL;
+		_a.kernel = sharpen_default;
 		_a.callback = callback;
 		_a.src = _to_sharpen;
 		_a.dst = &_sharpened;
@@ -147,6 +146,8 @@ composite_apply_kernel(void *args)
 	pthread_mutex_lock(&a->dst->mutex);
 	if (a->kernel) a->kernel(a->dst, a->src);
 	pthread_mutex_unlock(&a->dst->mutex);
+
+	printf("Done\n");
 
 	if (a->callback) a->callback();
 	return NULL;

@@ -3,6 +3,7 @@
 
 #include "effects/enhancements.h"
 #include "effects/rectify.h"
+#include "effects/sharpen.h"
 
 void composite_init(uint8_t *base_img, int width, int height, int rowstride, int bpp);
 void composite_deinit();
